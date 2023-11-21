@@ -17,8 +17,8 @@ COPY /exp /arm/exp
 
 RUN chmod +x /arm/build.sh \
 	/arm/build.sh \
-	&& rm uboot_tiny4412-20130729.tgz \
-	arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz
+	&& rm /arm/uboot_tiny4412-20130729.tgz \
+	/arm/arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz
 
 ENV PATH="/arm/opt/FriendlyARM/toolschain/4.5.1/bin:${PATH}"
 
