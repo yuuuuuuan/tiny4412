@@ -10,5 +10,5 @@ RUN apt-get update -y \
     git \
     && apt-get clean
 
-COPY ../uboot_tiny4412-20130729.tgz /arm/uboot_tiny4412-20130729.tgz 
-COPY ../arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz /arm/arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz 
+COPY uboot_tiny4412-20130729.tgz /arm/uboot_tiny4412-20130729.tgz 
+COPY arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz /arm/arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz 
