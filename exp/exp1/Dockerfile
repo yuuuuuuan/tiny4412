@@ -2,9 +2,13 @@ FROM ubuntu:20.04
 LABEL name="yuuuuuuan"
 LABEL maintainer="https://github.com/yuuuuuuan"
 
-# 将本地的脚本文件复制到镜像中
-COPY for.sh /usr/local/bin/for.sh
+# Install build dependencies
+RUN apt-get update -y \
+    && apt-get install -y make \
+    build-essential \
+    apt-utils \
+    git \
+    && apt-get clean
 
-# 设置脚本文件的执行权限并执行
-RUN chmod +x /usr/local/bin/for.sh && /usr/local/bin/for.sh
-
+CP /arm/uboot_tiny4412-20130729.tgz ../uboot_tiny4412-20130729.tgz
+CP /arm/arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz ../arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz
