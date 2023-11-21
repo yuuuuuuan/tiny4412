@@ -23,3 +23,6 @@ RUN rm -rf /arm/uboot_tiny4412-20130729.tgz \
 
 ENV PATH="/arm/opt/FriendlyARM/toolschain/4.5.1/bin:${PATH}"
 
+WORKDIR /arm/uboot_tiny4412/
+
+RUN make tiny4412_config && make
