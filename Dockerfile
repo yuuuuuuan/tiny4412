@@ -12,10 +12,12 @@ RUN apt-get update -y \
     minicom \
     && apt-get clean
 
-COPY uboot_tiny4412-20130729.tgz /arm/uboot_tiny4412-20130729.tgz 
-COPY arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz /arm/arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz 
+COPY build.sh uboot_tiny4412-20130729.tgz arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz /arm/
 COPY /exp /arm/exp
 
-COPY build.sh /arm/build.sh
+RUN chmod +x /arm/build.sh && \
+	/arm/build.sh && \
+	rm uboot_tiny4412-20130729.tgz && arm-linux-gcc-4.5.1-v6-vfp-20120301.tgz
 
-RUN chmod +x /arm/build.sh && /arm/build.sh
+ENV PATH="/arm/opt/FriendlyARM/toolschain/4.5.1/bin:${PATH}"
+
