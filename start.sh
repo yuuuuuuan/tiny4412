@@ -2,4 +2,4 @@
 
 systemctl start docker
 docker build -t armlinux . 
-docker run -it --name my-container armlinux /bin/bash 
+docker run --privileged -it --name my-container -v /dev/sdb:/dev/sdb armlinux /bin/bash
