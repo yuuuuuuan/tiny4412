@@ -1,0 +1,76 @@
+#include "ADC.h"
+#include "exynos4412.h"
+#include "uart.h"
+#include "stdio.h"
+
+unsigned char table[10] = {'0','1','2','3','4','5','6','7','8','9'};
+void mydelay_ms(int time)
+{
+	int i, j;
+	while(time--)
+	{
+		for (i = 0; i < 5; i++)
+			for (j = 0; j < 514; j++);
+	}
+}
+ 
+void adc_init(int temp)
+{
+	ADCCON = (1<<16 | 1<<14 | 1<<14 | 99<<6 | 1<<1);
+	ADCMUX = 3;
+	temp = ADCDAT & 0xfff;
+}
+void uart0_init()
+{
+ 
+	/*UART0 initialize*/
+	GPA0CON = (GPA0CON & ~0xFF ) | (0x22); //GPA1_0:RX;GPA1_1:TX
+ 
+	UART0.ULCON0 = 0x3; //Normal mode, No parity,One stop bit,8 data bits
+	UART0.UCON0 = 0x5;  //Interrupt request or polling mode
+	//Baud-rate : src_clock:100Mhz
+	UART0.UBRDIV0 = 53;
+	UART0.UFRACVAL0 = 0x4;
+}
+void putc0(const char data)
+{
+	while(!(UART0.UTRSTAT0 & 0X2));
+	UART0.UTXH0 = data;
+	if (data == '\n')
+			putc0('\r');
+}
+void puts0(const  char  *pstr)
+{
+	while(*pstr != '\0')
+		putc0(*pstr++);
+}
+/*
+ *  裸机代码，不同于LINUX 应用层， 一定加循环控制
+ */
+int main (void)
+{
+	unsigned char bit4,bit3,bit2,bit1;
+	uart0_init();
+	unsigned int temp = 0;
+	adc_init(temp);
+	puts0("开始转换\n");
+	while(1)
+	{
+		while(!(ADCCON & 0x8000));
+		temp = ADCDAT & 0xfff;
+		//printf("U = %d\n",temp);
+		temp = 1.8 * 1000 * temp/0xfff;
+		bit4 = temp /1000;
+		putc0(table[bit4]);
+		bit3 = (temp % 1000)/100;
+		putc0(table[bit3]);
+         	bit2 = ((temp % 1000)%100)/10;
+		putc0(table[bit2]);
+		bit1 = ((temp % 1000)%100)%10;
+		putc0(table[bit1]);
+		puts0("mV");
+		putc0('\n');
+		mydelay_ms(1000);
+	}
+   return 0;
+}

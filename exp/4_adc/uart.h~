@@ -1,0 +1,18 @@
+typedef struct {
+				unsigned int ULCON0;
+				unsigned int UCON0;
+				unsigned int UFCON0;
+				unsigned int UMCON0;
+				unsigned int UTRSTAT0;
+				unsigned int UERSTAT0;
+				unsigned int UFSTAT0;
+				unsigned int UMSTAT0;
+				unsigned int UTXH0;
+				unsigned int URXH0;
+				unsigned int UBRDIV0;
+				unsigned int UFRACVAL0;
+				unsigned int UINTP0;
+				unsigned int UINTSP0;
+				unsigned int UINTM0;
+}uart0;
+#define UART0 ( * (volatile uart0 *)0x13800000 )

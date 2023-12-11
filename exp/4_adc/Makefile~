@@ -1,0 +1,6 @@
+default:
+	arm-linux-gcc -c ADC.c  -o ADC.o
+	arm-linux-ld  -Ttext=0x70003000  ADC.o  -o ADC
+	arm-linux-objcopy  -O binary   ADC  ADC.bin
+clean:
+	rm -f ADC.o  test  ADC.bin   *~ 

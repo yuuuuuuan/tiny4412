@@ -1,0 +1,109 @@
+#include "pwm.h"
+#include "mygpio.h"
+#include "myuart.h"
+int main(void)
+{
+char c[20];
+uart0_init();
+pwm_init();
+while(1)
+	{
+		gets(c);
+		puts(c);
+		if(!strcmp(c,"beep_on\n"))
+			beep_on();
+		else if(!strcmp(c,"beep_off\n"))
+			beep_off();
+		else if(!strcmp(c,"stop\n"))
+			break;
+		else
+			puts("wrong\n");
+	}
+	return 0;
+}
+void pwm_init(void)
+{
+	GPD0.CON=GPD0.CON & (~(0xf))|0x2;
+	GPD0.PUD=GPD0.PUD & (~(0xf));
+	PWM.TCFG0=PWM.TCFG0 & (~(0xff))|0xf9; //40mhz/250
+	PWM.TCFG1=PWM.TCFG1 & (~(0xf))|0x4;	//40mhz/250/16=10000hz
+	PWM.TCMPB0 = 1;	//this register'value is bigger,then,the time of high level is longer. 
+	PWM.TCNTB0 = 2;
+	PWM.TCON = PWM.TCON & (~(0xf)) | (1<<1);
+	PWM.TCON = PWM.TCON & (~(0xf));
+}
+
+void beep_on(void)
+{
+	PWM.TCON = PWM.TCON | (1<<0) | (1<<3);
+}
+
+void beep_off(void)
+{
+	PWM.TCON = PWM.TCON & (~(1<<0));
+}
+void uart0_init()
+{
+	/*UART0 initialize*/
+	GPA0.CON = GPA0.CON & (~(0xff)) | (0x22); //GPA0_0:RX;GPA0_1:TX
+	UART0.ULCONn = 0x3; //Normal mode, No parity,One stop bit,8 data bits
+	UART0.UCONn = 0x5;  //Interrupt request or polling mode
+	//Baud-rate : src_clock:100Mhz
+	UART0.UBRDIVn = 53;
+	UART0.UFRACVALn = 0x4;
+}
+
+int strcmp(const char *src, const char *des)
+{
+	while(*src || *des)
+	{
+		if(*src > *des)
+			return 1;
+		else if(*src < *des)
+			return -1;
+		else
+		{
+			src++;
+			des++;
+		}
+	}
+	return 0;
+}
+
+void putc(const char data)
+{
+	while(!(UART0.UTRSTATn & 0X2));
+	UART0.UTXHn = data;
+	if(data == '\n')
+		putc('\r');	//i dont know why! if '\n' print endless '\n'
+}
+
+char getc(void)
+{
+	char data;
+	while(!(UART0.UTRSTATn & 0x1));
+	data = UART0.URXHn;
+	//if ((data == '\n')||(data == '\r'))	//'\n' is useless minicom dont know '\n'
+	if(data == '\r')	//'\n' is useless minicom dont know '\n' enter key is '\r'
+		putc('\n');	//is '\n' not '\r' '\r' cant print next line, '\n' + '\r' can print next line
+	else
+		putc(data);
+	return data;
+}
+
+void puts(const char *pstr)
+{
+	while(*pstr != '\0')
+		putc(*pstr++);
+}
+
+void gets(char *p)
+{
+	char data;
+	while((data = getc()) != '\r')	
+		*p++ = data;
+	if(data == '\r')	//is '\r' not '\n'
+		*p++ = '\n';	//example is wrong!!! is '\n' not '\r'!!!
+	*p = '\0';
+}
+

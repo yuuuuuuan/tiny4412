@@ -1,0 +1,11 @@
+/***********************  ADC ******************************************/
+#pragma once
+#define  	ADC_CFG		(*(volatile unsigned long *)0x10010118
+ 
+ 
+#define		ADCCON		(*(volatile unsigned long *)0x126C0000
+#define		ADCDLY		(*(volatile unsigned long *)0x126C0008
+#define		ADCDAT		(*(volatile unsigned long *)0x126C000C
+#define		CLRINTADC	(*(volatile unsigned long *)0x126C0018
+#define		ADCMUX		(*(volatile unsigned long *)0x126C001C
+

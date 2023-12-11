@@ -1,0 +1,25 @@
+
+ #define PWMTCFG0    (*(volatile unsigned long *)0x139D0000)
+ #define PWMTCFG1    (*(volatile unsigned long *)0x139D0004)
+ #define PWMTCON     (*(volatile unsigned long *)0x139D0008)
+ #define PWMTCNTB0   (*(volatile unsigned long *)0x139D000C)
+ #define PWMTCMPB0   (*(volatile unsigned long *)0x139D0010)
+ #define PWMTCNTO0   (*(volatile unsigned long *)0x139D0014)
+ #define PWMTCNTB1   (*(volatile unsigned long *)0x139D0018)
+ #define PWMTCMPB1   (*(volatile unsigned long *)0x139D001C)
+ #define PWMTCNTO1   (*(volatile unsigned long *)0x139D0020)
+ #define PWMTCNTB2   (*(volatile unsigned long *)0x139D0024)
+ #define PWMTCMPB2   (*(volatile unsigned long *)0x139D0028)
+ #define PWMTCNTO2   (*(volatile unsigned long *)0x139D002C)
+ #define PWMTCNTB3   (*(volatile unsigned long *)0x139D0030)
+ #define PWMTCMPB3   (*(volatile unsigned long *)0x139D0034)
+ #define PWMTCNTO3   (*(volatile unsigned long *)0x139D0038)
+ #define PWMTCNTB4   (*(volatile unsigned long *)0x139D003C)
+ #define PWMTCNTO4    (*(volatile unsigned long *)0x139D0040)
+ #define PWMTINT_CSTAT (*(volatile unsigned long *)0x139D0044)
+
+#define GPD0CON  (*(volatile unsigned long *)0x114000A0)
+#define GPD0PUD  (*(volatile unsigned long *)0x114000A8)
+
+
+
